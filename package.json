@@ -1,0 +1,23 @@
+{
+  "name": "hook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "rollup": "^0.25.5",
+    "rollup-plugin-typescript": "^0.6.0",
+    "typescript": "^1.8.9",
+    "typings": "^0.7.9"
+  },
+  "scripts": {
+    "test": "rollup tests/tests.ts -c rollup.tests.config.js -o tests/tests.js -f cjs && mocha tests/tests.js"
+  },
+  "keywords": [],
+  "author": "Alexander Trefz",
+  "license": ""
+}
