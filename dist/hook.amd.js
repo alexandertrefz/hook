@@ -1,5 +1,9 @@
 define(['exports'], function (exports) { 'use strict';
 
+    var IEvent;
+
+    var IEventOptions;
+
     var Event = (function () {
         function Event(options) {
             if (options === void 0) { options = {}; }
@@ -28,25 +32,25 @@ define(['exports'], function (exports) { 'use strict';
             this.isPropagationStopped = true;
         };
         Event.prototype.hasNamespaces = function () {
-            return !!~this.eventName.indexOf(".");
+            return !!~this.eventName.indexOf('.');
         };
         Event.prototype.getNamespaces = function () {
-            var events = this.eventName.split(" ");
+            var events = this.eventName.split(' ');
             var results = [];
             var event, namespaces;
             for (var i = 0; i < events.length; i++) {
                 event = events[i];
-                namespaces = event.split(".");
+                namespaces = event.split('.');
                 namespaces.shift(); // remove the eventName
                 results = results.concat(namespaces);
             }
             return results;
         };
         Event.prototype.hasEventName = function () {
-            return this.getEventName() !== "";
+            return this.getEventName() !== '';
         };
         Event.prototype.getEventName = function () {
-            return this.eventName.split(".")[0];
+            return this.eventName.split('.')[0];
         };
         return Event;
     }());
@@ -60,7 +64,7 @@ define(['exports'], function (exports) { 'use strict';
         NamespacedHandler.prototype.matches = function (event) {
             var eventName = event.getEventName();
             var namespaces;
-            if (!(eventName === this.eventName || eventName === "")) {
+            if (!(eventName === this.eventName || eventName === '')) {
                 return false;
             }
             namespaces = event.getNamespaces();
@@ -86,7 +90,7 @@ define(['exports'], function (exports) { 'use strict';
         };
         Handle.prototype._splitEvent = function (event, origArgs, methodName) {
             var args, eventNames;
-            eventNames = event.eventName.split(" ");
+            eventNames = event.eventName.split(' ');
             for (var i = 0; i < eventNames.length; i++) {
                 args = Array.prototype.slice.call(origArgs, 0);
                 args[0] = new Event(args[0]);
@@ -95,8 +99,8 @@ define(['exports'], function (exports) { 'use strict';
             }
         };
         Handle.prototype.addHandler = function (event, handler) {
-            if (~event.eventName.split("").indexOf(" ")) {
-                this._splitEvent(event, arguments, "addHandler");
+            if (~event.eventName.split('').indexOf(' ')) {
+                this._splitEvent(event, arguments, 'addHandler');
                 return;
             }
             if (!event.hasNamespaces()) {
@@ -118,21 +122,23 @@ define(['exports'], function (exports) { 'use strict';
         };
         Handle.prototype.removeHandler = function (event, handler) {
             var i;
-            if (event != null && ~event.eventName.split("").indexOf(" ")) {
-                this._splitEvent(event, arguments, "removeHandler");
+            if (event != null && ~event.eventName.split('').indexOf(' ')) {
+                this._splitEvent(event, arguments, 'removeHandler');
                 return;
             }
             if (event == null && handler == null) {
                 this.namespacedHandlers = [];
                 for (var eventName in this.events) {
-                    this.events[eventName] = [];
+                    if (this.events.hasOwnProperty(eventName)) {
+                        this.events[eventName] = [];
+                    }
                 }
                 return;
             }
             if (!event.hasNamespaces()) {
-                if (event != null && handler != null && typeof handler === "function") {
+                if (event != null && handler != null && typeof handler === 'function') {
                     var eventArr = this._getEventsArr(event);
-                    if (typeof eventArr !== "undefined" && eventArr !== null) {
+                    if (typeof eventArr !== 'undefined' && eventArr !== null) {
                         eventArr.splice(eventArr.indexOf(handler), 1);
                     }
                 }
@@ -141,7 +147,7 @@ define(['exports'], function (exports) { 'use strict';
                 }
             }
             else {
-                if (event != null && handler != null && typeof handler === "function") {
+                if (event != null && handler != null && typeof handler === 'function') {
                     i = 0;
                     while (true) {
                         if (this.namespacedHandlers[i].handler === handler) {
@@ -169,8 +175,8 @@ define(['exports'], function (exports) { 'use strict';
         };
         Handle.prototype.triggerHandlers = function (obj, event, data) {
             if (data === void 0) { data = []; }
-            if (~event.eventName.split("").indexOf(" ")) {
-                this._splitEvent(event, arguments, "triggerHandlers");
+            if (~event.eventName.split('').indexOf(' ')) {
+                this._splitEvent(event, arguments, 'triggerHandlers');
                 return;
             }
             event.data = data;
@@ -199,6 +205,8 @@ define(['exports'], function (exports) { 'use strict';
         return Handle;
     }());
 
+    exports.IEvent = IEvent;
+    exports.IEventOptions = IEventOptions;
     exports.Event = Event;
     exports.NamespacedHandler = NamespacedHandler;
     exports.Handle = Handle;
