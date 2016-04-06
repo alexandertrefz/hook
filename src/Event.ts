@@ -2,59 +2,59 @@ import { IEvent } from './interfaces/IEvent'
 import { IEventOptions } from './interfaces/IEventOptions'
 
 export class Event implements IEvent, IEventOptions {
-	eventName:string
-	isDefaultPrevented:boolean
-	isCancelled:boolean
-	isPropagationStopped:boolean
-	data:Array<any>
+	public eventName: string
+	public isDefaultPrevented: boolean
+	public isCancelled: boolean
+	public isPropagationStopped: boolean
+	public data: any
 
-	constructor(options:IEventOptions | string = {}) {
-		this.eventName            = ''
-		this.isCancelled          = false
-		this.isDefaultPrevented   = false
+	constructor(options: IEventOptions | string = {}) {
+		this.eventName = ''
+		this.isCancelled = false
+		this.isDefaultPrevented = false
 		this.isPropagationStopped = false
 
 		if (typeof options === 'string') {
 			this.eventName = options
 		} else if (options != null) {
 			let {
-				eventName            = this.eventName,
-				isDefaultPrevented   = this.isDefaultPrevented,
-				isCancelled          = this.isCancelled,
+				eventName = this.eventName,
+				isDefaultPrevented = this.isDefaultPrevented,
+				isCancelled = this.isCancelled,
 				isPropagationStopped = this.isPropagationStopped,
 			} = options
 
-			this.eventName            = eventName
-			this.isDefaultPrevented   = isDefaultPrevented
-			this.isCancelled          = isCancelled
+			this.eventName = eventName
+			this.isDefaultPrevented = isDefaultPrevented
+			this.isCancelled = isCancelled
 			this.isPropagationStopped = isPropagationStopped
 		}
 	}
 
-	preventDefault():void {
+	public preventDefault(): void {
 		this.isDefaultPrevented = true
 	}
 
-	cancel():void {
+	public cancel(): void {
 		this.isCancelled = true
 	}
 
-	stopPropagation():void {
+	public stopPropagation(): void {
 		this.isPropagationStopped = true
 	}
 
-	hasNamespaces():boolean {
-		return !!~this.eventName.indexOf(".")
+	public hasNamespaces(): boolean {
+		return !!~this.eventName.indexOf('.')
 	}
 
-	getNamespaces():string[] {
-		let events = this.eventName.split(" ")
+	public getNamespaces(): string[] {
+		let events = this.eventName.split(' ')
 		let results = []
 		let event, namespaces
 
 		for (let i = 0; i < events.length; i++) {
 			event = events[i]
-			namespaces = event.split(".")
+			namespaces = event.split('.')
 			namespaces.shift() // remove the eventName
 			results = results.concat(namespaces)
 		}
@@ -62,11 +62,11 @@ export class Event implements IEvent, IEventOptions {
 		return results
 	}
 
-	hasEventName():boolean {
-		return this.getEventName() !== ""
+	public hasEventName(): boolean {
+		return this.getEventName() !== ''
 	}
 
-	getEventName():string {
-		return this.eventName.split(".")[0]
+	public getEventName(): string {
+		return this.eventName.split('.')[0]
 	}
 }

@@ -1,21 +1,21 @@
 import { IEvent } from './interfaces/IEvent'
 
 export class NamespacedHandler {
-	namespaces:Array<string>
-	eventName:string
-	handler:Function
+	public namespaces: Array<string>
+	public eventName: string
+	public handler: Function
 
-	constructor(event:IEvent, handler:Function) {
-		this.handler    = handler
+	constructor(event: IEvent, handler: Function) {
+		this.handler = handler
 		this.namespaces = event.getNamespaces()
-		this.eventName  = event.getEventName()
+		this.eventName = event.getEventName()
 	}
 
-	matches(event:IEvent):boolean {
+	public matches(event: IEvent): boolean {
 		let eventName = event.getEventName()
 		let namespaces
 
-		if (!(eventName === this.eventName || eventName === "")) {
+		if (!(eventName === this.eventName || eventName === '')) {
 			return false
 		}
 

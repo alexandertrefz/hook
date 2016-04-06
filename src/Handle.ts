@@ -4,9 +4,9 @@ import { Event } from './Event'
 import { NamespacedHandler } from './NamespacedHandler'
 
 export class Handle {
-	events:Object
-	namespacedHandlers:Array<NamespacedHandler>
-	namespacedEvents:Array<string>
+	public events: Object
+	public namespacedHandlers: Array<NamespacedHandler>
+	public namespacedEvents: Array<string>
 
 	constructor() {
 		this.events = {}
@@ -14,13 +14,13 @@ export class Handle {
 		this.namespacedEvents = []
 	}
 
-	_getEventsArr(event:IEvent):Array<Function> {
+	private _getEventsArr(event: IEvent): Array<Function> {
 		return this.events[event.eventName]
 	}
 
-	_splitEvent(event:IEvent, origArgs, methodName:string):void {
+	private _splitEvent(event: IEvent, origArgs: any, methodName: string): void {
 		let args, eventNames
-		eventNames = event.eventName.split(" ")
+		eventNames = event.eventName.split(' ')
 
 		for (let i = 0; i < eventNames.length; i++) {
 			args = Array.prototype.slice.call(origArgs, 0)
@@ -30,9 +30,9 @@ export class Handle {
 		}
 	}
 
-	addHandler(event:IEvent, handler:Function):void {
-		if (~event.eventName.split("").indexOf(" ")) {
-			this._splitEvent(event, arguments, "addHandler")
+	public addHandler(event: IEvent, handler: Function): void {
+		if (~event.eventName.split('').indexOf(' ')) {
+			this._splitEvent(event, arguments, 'addHandler')
 			return
 		}
 
@@ -54,11 +54,11 @@ export class Handle {
 		}
 	}
 
-	removeHandler(event?:IEvent, handler?:Function):void {
+	public removeHandler(event?: IEvent, handler?: Function): void {
 		let i
 
-		if (event != null && ~event.eventName.split("").indexOf(" ")) {
-			this._splitEvent(event, arguments, "removeHandler")
+		if (event != null && ~event.eventName.split('').indexOf(' ')) {
+			this._splitEvent(event, arguments, 'removeHandler')
 			return
 		}
 
@@ -66,23 +66,25 @@ export class Handle {
 			this.namespacedHandlers = []
 
 			for (let eventName in this.events) {
-				this.events[eventName] = []
+				if (this.events.hasOwnProperty(eventName)) {
+					this.events[eventName] = []
+				}
 			}
 
 			return
 		}
 
 		if (!event.hasNamespaces()) {
-			if (event != null && handler != null && typeof handler === "function") {
+			if (event != null && handler != null && typeof handler === 'function') {
 				let eventArr = this._getEventsArr(event)
-				if (typeof eventArr !== "undefined" && eventArr !== null) {
+				if (typeof eventArr !== 'undefined' && eventArr !== null) {
 					eventArr.splice(eventArr.indexOf(handler), 1)
 				}
 			} else if (event != null && handler == null) {
 				this.events[event.eventName] = []
 			}
 		} else {
-			if (event != null && handler != null && typeof handler === "function") {
+			if (event != null && handler != null && typeof handler === 'function') {
 				i = 0
 				while (true) {
 					if (this.namespacedHandlers[i].handler === handler) {
@@ -110,9 +112,9 @@ export class Handle {
 		}
 	}
 
-	triggerHandlers(obj, event:IEvent, data = []):void {
-		if (~event.eventName.split("").indexOf(" ")) {
-			this._splitEvent(event, arguments, "triggerHandlers")
+	public triggerHandlers(obj: any, event: IEvent, data: Array<any> = []): void {
+		if (~event.eventName.split('').indexOf(' ')) {
+			this._splitEvent(event, arguments, 'triggerHandlers')
 			return
 		}
 
