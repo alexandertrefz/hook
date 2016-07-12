@@ -8,11 +8,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "mocha": "^2.4.5",
-    "rollup": "^0.25.5",
-    "rollup-plugin-typescript": "^0.6.0",
-    "typescript": "^1.8.9",
-    "typings": "^0.7.9"
+    "mocha": "2.5.3",
+    "rollup": "0.34.1",
+    "rollup-plugin-typescript": "0.7.6",
+    "tslint": "3.13.0",
+    "typescript": "2.0.0",
+    "typings": "1.3.1"
   },
   "scripts": {
     "test": "rollup tests/tests.ts -c rollup.tests.config.js -o tests/tests.js -f cjs && mocha tests/tests.js"
