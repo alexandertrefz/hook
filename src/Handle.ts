@@ -14,11 +14,11 @@ export default class Handle {
 		this.namespacedEvents = []
 	}
 
-	private _getEventsArr(event: IEvent): Array<Function> {
+	protected _getEventsArr(event: IEvent): Array<Function> {
 		return this.events[event.eventName]
 	}
 
-	private _splitEvent(event: IEvent, origArgs: any, methodName: string): void {
+	protected _splitEvent(event: IEvent, origArgs: any, methodName: string): void {
 		let args, eventNames
 		eventNames = event.eventName.split(' ')
 
