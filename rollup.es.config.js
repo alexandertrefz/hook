@@ -4,7 +4,8 @@ export default {
 	moduleName: 'hook',
 	plugins: [
 		typescript({
-			target: 'ES6'
+			typescript: require('typescript'),
+			target: "ES6",
 		})
 	],
 }
