@@ -1,5 +1,6 @@
-export var IEvent
-export interface IEvent {
+let IEvent, IEventOptions
+
+interface IEvent {
 	eventName: string
 	isDefaultPrevented: boolean
 	isCancelled: boolean
@@ -13,3 +14,12 @@ export interface IEvent {
 	hasEventName(): boolean
 	getEventName(): string
 }
+
+interface IEventOptions {
+	eventName?: string
+	isDefaultPrevented?: boolean
+	isCancelled?: boolean
+	isPropagationStopped?: boolean
+}
+
+export { IEvent, IEventOptions }

@@ -1,5 +1,4 @@
-import { IEvent } from './interfaces/IEvent'
-import { IEventOptions } from './interfaces/IEventOptions'
+import { IEvent, IEventOptions } from './interfaces'
 
 export class Event implements IEvent, IEventOptions {
 	public eventName: string

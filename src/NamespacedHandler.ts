@@ -1,4 +1,4 @@
-import { IEvent } from './interfaces/IEvent'
+import { IEvent } from './interfaces'
 
 export class NamespacedHandler {
 	public namespaces: Array<string>

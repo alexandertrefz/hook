@@ -1,4 +1,4 @@
-import { IEvent } from './interfaces/IEvent'
+import { IEvent } from './interfaces'
 
 import { Event } from './Event'
 import { NamespacedHandler } from './NamespacedHandler'
