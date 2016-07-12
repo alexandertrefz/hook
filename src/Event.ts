@@ -15,7 +15,7 @@ export default class Event implements IEvent, IEventOptions {
 
 		if (typeof options === 'string') {
 			this.eventName = options
-		} else if (options != null) {
+		} else {
 			let {
 				eventName = this.eventName,
 				isDefaultPrevented = this.isDefaultPrevented,

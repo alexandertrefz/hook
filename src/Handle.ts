@@ -14,7 +14,7 @@ export default class Handle {
 		this.namespacedEvents = []
 	}
 
-	protected _getEventsArr(event: IEvent): Array<Function> {
+	protected _getEventsArr(event: IEvent): Array<Function> | undefined {
 		return this.events[event.eventName]
 	}
 
@@ -57,12 +57,12 @@ export default class Handle {
 	public removeHandler(event?: IEvent, handler?: Function): void {
 		let i
 
-		if (event != null && ~event.eventName.split('').indexOf(' ')) {
+		if (event !== undefined && ~event.eventName.split('').indexOf(' ')) {
 			this._splitEvent(event, arguments, 'removeHandler')
 			return
 		}
 
-		if (event == null && handler == null) {
+		if (event === undefined && handler === undefined) {
 			this.namespacedHandlers = []
 
 			for (let eventName in this.events) {
@@ -74,39 +74,35 @@ export default class Handle {
 			return
 		}
 
+		if (event === undefined) {
+			return
+		}
+
 		if (!event.hasNamespaces()) {
-			if (event != null && handler != null && typeof handler === 'function') {
+			if (typeof handler === 'function') {
 				let eventArr = this._getEventsArr(event)
-				if (typeof eventArr !== 'undefined' && eventArr !== null) {
+				if (typeof eventArr !== 'undefined') {
 					eventArr.splice(eventArr.indexOf(handler), 1)
 				}
-			} else if (event != null && handler == null) {
+			} else {
 				this.events[event.eventName] = []
 			}
 		} else {
-			if (event != null && handler != null && typeof handler === 'function') {
-				i = 0
-				while (true) {
+			i = 0
+			while (true) {
+				if (typeof handler === 'function') {
 					if (this.namespacedHandlers[i].handler === handler) {
 						this.namespacedHandlers.splice(i, 1)
 					}
-
-					i++
-					if (i >= this.namespacedHandlers.length) {
-						break
-					}
-				}
-			} else if (event != null && handler == null) {
-				i = 0
-				while (true) {
+				} else {
 					if (this.namespacedHandlers[i].matches(event)) {
 						this.namespacedHandlers.splice(i, 1)
 					}
+				}
 
-					i++
-					if (i >= this.namespacedHandlers.length) {
-						break
-					}
+				i++
+				if (i >= this.namespacedHandlers.length) {
+					break
 				}
 			}
 		}
@@ -129,7 +125,7 @@ export default class Handle {
 		if (!event.hasNamespaces()) {
 			let eventArr = this._getEventsArr(event)
 
-			if (eventArr != null) {
+			if (eventArr !== undefined) {
 				for (let i = 0; i < eventArr.length; i++) {
 					eventArr[i].apply(obj, handlerArgs)
 				}
