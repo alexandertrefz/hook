@@ -1,7 +1,6 @@
 define(['exports'], function (exports) { 'use strict';
 
     var IEvent;
-
     var IEventOptions;
 
     var Event = (function () {
@@ -14,7 +13,7 @@ define(['exports'], function (exports) { 'use strict';
             if (typeof options === 'string') {
                 this.eventName = options;
             }
-            else if (options != null) {
+            else {
                 var _a = options.eventName, eventName = _a === void 0 ? this.eventName : _a, _b = options.isDefaultPrevented, isDefaultPrevented = _b === void 0 ? this.isDefaultPrevented : _b, _c = options.isCancelled, isCancelled = _c === void 0 ? this.isCancelled : _c, _d = options.isPropagationStopped, isPropagationStopped = _d === void 0 ? this.isPropagationStopped : _d;
                 this.eventName = eventName;
                 this.isDefaultPrevented = isDefaultPrevented;
@@ -122,11 +121,11 @@ define(['exports'], function (exports) { 'use strict';
         };
         Handle.prototype.removeHandler = function (event, handler) {
             var i;
-            if (event != null && ~event.eventName.split('').indexOf(' ')) {
+            if (event !== undefined && ~event.eventName.split('').indexOf(' ')) {
                 this._splitEvent(event, arguments, 'removeHandler');
                 return;
             }
-            if (event == null && handler == null) {
+            if (event === undefined && handler === undefined) {
                 this.namespacedHandlers = [];
                 for (var eventName in this.events) {
                     if (this.events.hasOwnProperty(eventName)) {
@@ -135,40 +134,36 @@ define(['exports'], function (exports) { 'use strict';
                 }
                 return;
             }
+            if (event === undefined) {
+                return;
+            }
             if (!event.hasNamespaces()) {
-                if (event != null && handler != null && typeof handler === 'function') {
+                if (typeof handler === 'function') {
                     var eventArr = this._getEventsArr(event);
-                    if (typeof eventArr !== 'undefined' && eventArr !== null) {
+                    if (typeof eventArr !== 'undefined') {
                         eventArr.splice(eventArr.indexOf(handler), 1);
                     }
                 }
-                else if (event != null && handler == null) {
+                else {
                     this.events[event.eventName] = [];
                 }
             }
             else {
-                if (event != null && handler != null && typeof handler === 'function') {
-                    i = 0;
-                    while (true) {
+                i = 0;
+                while (true) {
+                    if (typeof handler === 'function') {
                         if (this.namespacedHandlers[i].handler === handler) {
                             this.namespacedHandlers.splice(i, 1);
                         }
-                        i++;
-                        if (i >= this.namespacedHandlers.length) {
-                            break;
-                        }
                     }
-                }
-                else if (event != null && handler == null) {
-                    i = 0;
-                    while (true) {
+                    else {
                         if (this.namespacedHandlers[i].matches(event)) {
                             this.namespacedHandlers.splice(i, 1);
                         }
-                        i++;
-                        if (i >= this.namespacedHandlers.length) {
-                            break;
-                        }
+                    }
+                    i++;
+                    if (i >= this.namespacedHandlers.length) {
+                        break;
                     }
                 }
             }
@@ -186,7 +181,7 @@ define(['exports'], function (exports) { 'use strict';
             var handlerArgs = [event].concat(data);
             if (!event.hasNamespaces()) {
                 var eventArr = this._getEventsArr(event);
-                if (eventArr != null) {
+                if (eventArr !== undefined) {
                     for (var i = 0; i < eventArr.length; i++) {
                         eventArr[i].apply(obj, handlerArgs);
                     }
@@ -210,5 +205,7 @@ define(['exports'], function (exports) { 'use strict';
     exports.Event = Event;
     exports.NamespacedHandler = NamespacedHandler;
     exports.Handle = Handle;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 });

@@ -1,6 +1,5 @@
-var IEvent;
-
-var IEventOptions;
+let IEvent;
+let IEventOptions;
 
 class Event {
     constructor(options = {}) {
@@ -11,8 +10,8 @@ class Event {
         if (typeof options === 'string') {
             this.eventName = options;
         }
-        else if (options != null) {
-            var { eventName = this.eventName, isDefaultPrevented = this.isDefaultPrevented, isCancelled = this.isCancelled, isPropagationStopped = this.isPropagationStopped, } = options;
+        else {
+            let { eventName = this.eventName, isDefaultPrevented = this.isDefaultPrevented, isCancelled = this.isCancelled, isPropagationStopped = this.isPropagationStopped, } = options;
             this.eventName = eventName;
             this.isDefaultPrevented = isDefaultPrevented;
             this.isCancelled = isCancelled;
@@ -32,10 +31,10 @@ class Event {
         return !!~this.eventName.indexOf('.');
     }
     getNamespaces() {
-        var events = this.eventName.split(' ');
-        var results = [];
-        var event, namespaces;
-        for (var i = 0; i < events.length; i++) {
+        let events = this.eventName.split(' ');
+        let results = [];
+        let event, namespaces;
+        for (let i = 0; i < events.length; i++) {
             event = events[i];
             namespaces = event.split('.');
             namespaces.shift(); // remove the eventName
@@ -58,14 +57,14 @@ class NamespacedHandler {
         this.eventName = event.getEventName();
     }
     matches(event) {
-        var eventName = event.getEventName();
-        var namespaces;
+        let eventName = event.getEventName();
+        let namespaces;
         if (!(eventName === this.eventName || eventName === '')) {
             return false;
         }
         namespaces = event.getNamespaces();
-        for (var i = 0; i < namespaces.length; i++) {
-            var namespace = namespaces[i];
+        for (let i = 0; i < namespaces.length; i++) {
+            let namespace = namespaces[i];
             if (!(~this.namespaces.indexOf(namespace))) {
                 return false;
             }
@@ -84,9 +83,9 @@ class Handle {
         return this.events[event.eventName];
     }
     _splitEvent(event, origArgs, methodName) {
-        var args, eventNames;
+        let args, eventNames;
         eventNames = event.eventName.split(' ');
-        for (var i = 0; i < eventNames.length; i++) {
+        for (let i = 0; i < eventNames.length; i++) {
             args = Array.prototype.slice.call(origArgs, 0);
             args[0] = new Event(args[0]);
             args[0].eventName = eventNames[i];
@@ -99,7 +98,7 @@ class Handle {
             return;
         }
         if (!event.hasNamespaces()) {
-            var eventArr = this._getEventsArr(event);
+            let eventArr = this._getEventsArr(event);
             if (eventArr) {
                 eventArr.push(handler);
             }
@@ -116,54 +115,50 @@ class Handle {
         }
     }
     removeHandler(event, handler) {
-        var i;
-        if (event != null && ~event.eventName.split('').indexOf(' ')) {
+        let i;
+        if (event !== undefined && ~event.eventName.split('').indexOf(' ')) {
             this._splitEvent(event, arguments, 'removeHandler');
             return;
         }
-        if (event == null && handler == null) {
+        if (event === undefined && handler === undefined) {
             this.namespacedHandlers = [];
-            for (var eventName in this.events) {
+            for (let eventName in this.events) {
                 if (this.events.hasOwnProperty(eventName)) {
                     this.events[eventName] = [];
                 }
             }
             return;
         }
+        if (event === undefined) {
+            return;
+        }
         if (!event.hasNamespaces()) {
-            if (event != null && handler != null && typeof handler === 'function') {
-                var eventArr = this._getEventsArr(event);
-                if (typeof eventArr !== 'undefined' && eventArr !== null) {
+            if (typeof handler === 'function') {
+                let eventArr = this._getEventsArr(event);
+                if (typeof eventArr !== 'undefined') {
                     eventArr.splice(eventArr.indexOf(handler), 1);
                 }
             }
-            else if (event != null && handler == null) {
+            else {
                 this.events[event.eventName] = [];
             }
         }
         else {
-            if (event != null && handler != null && typeof handler === 'function') {
-                i = 0;
-                while (true) {
+            i = 0;
+            while (true) {
+                if (typeof handler === 'function') {
                     if (this.namespacedHandlers[i].handler === handler) {
                         this.namespacedHandlers.splice(i, 1);
                     }
-                    i++;
-                    if (i >= this.namespacedHandlers.length) {
-                        break;
-                    }
                 }
-            }
-            else if (event != null && handler == null) {
-                i = 0;
-                while (true) {
+                else {
                     if (this.namespacedHandlers[i].matches(event)) {
                         this.namespacedHandlers.splice(i, 1);
                     }
-                    i++;
-                    if (i >= this.namespacedHandlers.length) {
-                        break;
-                    }
+                }
+                i++;
+                if (i >= this.namespacedHandlers.length) {
+                    break;
                 }
             }
         }
@@ -177,18 +172,18 @@ class Handle {
         if (!Array.isArray(data)) {
             data = [data];
         }
-        var handlerArgs = [event].concat(data);
+        let handlerArgs = [event, ...data];
         if (!event.hasNamespaces()) {
-            var eventArr = this._getEventsArr(event);
-            if (eventArr != null) {
-                for (var i = 0; i < eventArr.length; i++) {
+            let eventArr = this._getEventsArr(event);
+            if (eventArr !== undefined) {
+                for (let i = 0; i < eventArr.length; i++) {
                     eventArr[i].apply(obj, handlerArgs);
                 }
             }
         }
         if (!event.hasEventName() || ~this.namespacedEvents.indexOf(event.getEventName())) {
-            var handler;
-            for (var i = 0; i < this.namespacedHandlers.length; i++) {
+            let handler;
+            for (let i = 0; i < this.namespacedHandlers.length; i++) {
                 handler = this.namespacedHandlers[i];
                 if (handler.matches(event)) {
                     handler.handler.apply(obj, handlerArgs);
