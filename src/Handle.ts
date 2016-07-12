@@ -1,9 +1,9 @@
 import { IEvent } from './interfaces'
 
-import { Event } from './Event'
-import { NamespacedHandler } from './NamespacedHandler'
+import Event from './Event'
+import NamespacedHandler from './NamespacedHandler'
 
-export class Handle {
+export default class Handle {
 	public events: Object
 	public namespacedHandlers: Array<NamespacedHandler>
 	public namespacedEvents: Array<string>

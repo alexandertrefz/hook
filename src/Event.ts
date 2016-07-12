@@ -1,6 +1,6 @@
 import { IEvent, IEventOptions } from './interfaces'
 
-export class Event implements IEvent, IEventOptions {
+export default class Event implements IEvent, IEventOptions {
 	public eventName: string
 	public isDefaultPrevented: boolean
 	public isCancelled: boolean

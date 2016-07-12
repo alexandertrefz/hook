@@ -1,6 +1,6 @@
 import { IEvent } from './interfaces'
 
-export class NamespacedHandler {
+export default class NamespacedHandler {
 	public namespaces: Array<string>
 	public eventName: string
 	public handler: Function
